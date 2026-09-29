@@ -216,8 +216,8 @@ pub fn save_wallet_state(data_dir: &Path, state: &WalletState) -> Result<()> {
 /// Load wallet state from a previously saved JSON file.
 pub fn load_wallet_state(data_dir: &Path) -> Result<WalletState> {
     let path = data_dir.join("wallet_state.json");
-    let contents =
-        std::fs::read_to_string(&path).context("no wallet state found — run create-wallet first")?;
+    let contents = std::fs::read_to_string(&path)
+        .context("no wallet state found — run create-wallet first")?;
     let state: WalletState = serde_json::from_str(&contents)?;
     Ok(state)
 }
