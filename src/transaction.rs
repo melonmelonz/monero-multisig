@@ -94,10 +94,7 @@ pub async fn export_multisig_info(rpc: &RpcClient) -> Result<String> {
 /// Import partial key images from co-signers to synchronize balance state.
 pub async fn import_multisig_info(rpc: &RpcClient, info: &[String]) -> Result<()> {
     let _: serde_json::Value = rpc
-        .request(
-            "import_multisig_info",
-            &serde_json::json!({ "info": info }),
-        )
+        .request("import_multisig_info", &serde_json::json!({ "info": info }))
         .await
         .context("import_multisig_info RPC call failed")?;
 
@@ -149,10 +146,7 @@ pub async fn build_unsigned_tx(
 /// Each co-signer calls this with the same `tx_data_hex` received from the
 /// transaction builder. Once enough signatures are collected, the transaction
 /// can be submitted.
-pub async fn sign_multisig_tx(
-    rpc: &RpcClient,
-    tx_data_hex: &str,
-) -> Result<PartiallySignedTx> {
+pub async fn sign_multisig_tx(rpc: &RpcClient, tx_data_hex: &str) -> Result<PartiallySignedTx> {
     let resp: SignMultisigResponse = rpc
         .request(
             "sign_multisig",
@@ -163,25 +157,18 @@ pub async fn sign_multisig_tx(
         .await
         .context("sign_multisig RPC call failed")?;
 
-    let tx_hash = resp
-        .tx_hash_list
-        .into_iter()
-        .next()
-        .unwrap_or_default();
+    let tx_hash = resp.tx_hash_list.into_iter().next().unwrap_or_default();
 
     Ok(PartiallySignedTx {
         tx_data_hex: resp.tx_data_hex,
         tx_hash,
-        signatures_count: 0,  // actual count tracked externally
+        signatures_count: 0, // actual count tracked externally
         signatures_required: 0,
     })
 }
 
 /// Submit a fully signed multisig transaction to the Monero network.
-pub async fn submit_multisig_tx(
-    rpc: &RpcClient,
-    tx_data_hex: &str,
-) -> Result<SubmitResult> {
+pub async fn submit_multisig_tx(rpc: &RpcClient, tx_data_hex: &str) -> Result<SubmitResult> {
     let resp: SubmitMultisigResponse = rpc
         .request(
             "submit_multisig",
@@ -192,11 +179,7 @@ pub async fn submit_multisig_tx(
         .await
         .context("submit_multisig RPC call failed")?;
 
-    let tx_hash = resp
-        .tx_hash_list
-        .into_iter()
-        .next()
-        .unwrap_or_default();
+    let tx_hash = resp.tx_hash_list.into_iter().next().unwrap_or_default();
 
     Ok(SubmitResult { tx_hash })
 }
@@ -227,10 +210,7 @@ struct GetBalanceResponse {
 /// Query the wallet's current balance.
 pub async fn get_balance(rpc: &RpcClient) -> Result<Balance> {
     let resp: GetBalanceResponse = rpc
-        .request(
-            "get_balance",
-            &serde_json::json!({ "account_index": 0 }),
-        )
+        .request("get_balance", &serde_json::json!({ "account_index": 0 }))
         .await
         .context("get_balance RPC call failed")?;
 

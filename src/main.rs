@@ -144,8 +144,7 @@ async fn main() -> Result<()> {
         }
 
         Command::ExchangeKeys { info, password } => {
-            let state = wallet::load_wallet_state(&config.data_dir)
-                .context("load wallet state")?;
+            let state = wallet::load_wallet_state(&config.data_dir).context("load wallet state")?;
 
             let threshold = match &state {
                 wallet::WalletState::Created { params, .. }
@@ -195,8 +194,14 @@ async fn main() -> Result<()> {
 
         Command::Balance => {
             let balance = transaction::get_balance(&rpc).await?;
-            println!("Balance:          {} XMR", transaction::format_xmr(balance.balance));
-            println!("Unlocked balance: {} XMR", transaction::format_xmr(balance.unlocked_balance));
+            println!(
+                "Balance:          {} XMR",
+                transaction::format_xmr(balance.balance)
+            );
+            println!(
+                "Unlocked balance: {} XMR",
+                transaction::format_xmr(balance.unlocked_balance)
+            );
         }
 
         Command::BuildTx {
