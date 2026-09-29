@@ -1,7 +1,8 @@
 [package]
 name = "monero-multisig"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+rust-version = "1.88"
 authors = ["Cam Porterfield <fundlush@proton.me>"]
 description = "A Monero M-of-N multisig wallet tool for creating wallets, exchanging keys, and co-signing transactions"
 license = "MIT"
